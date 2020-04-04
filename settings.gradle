@@ -1,2 +1,3 @@
 rootProject.name='Currency list'
 include ':app'
+include ':domain'
