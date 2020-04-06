@@ -1,8 +1,8 @@
 package com.solovgeo.domain.functions
 
-import com.solovgeo.domain.entity.CalculatedCurrencyValues
 import com.solovgeo.domain.entity.CurrencyList
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 object CurrencyFunctions {
 
@@ -10,16 +10,15 @@ object CurrencyFunctions {
         currencyCountBy: String,
         currencyValue: BigDecimal,
         currencyList: CurrencyList
-    ): CalculatedCurrencyValues {
-        val baseCurrencyValue = if (currencyCountBy == currencyList.baseCurrency) {
-            currencyValue
-        } else {
-            currencyList.rates[currencyList.baseCurrency]!!
-                .divide(currencyList.rates[currencyCountBy]!!)
-                .multiply(currencyValue)
-        }
-        return CalculatedCurrencyValues(rates = currencyList.rates.mapValues {
-            it.value.multiply(baseCurrencyValue)
-        })
+    ): CurrencyList {
+
+        val rates = currencyList.rates
+            .toMutableMap()
+            .apply { this[currencyList.baseCurrency] = BigDecimal.ONE }
+        val baseCurrencyRate = rates[currencyCountBy]
+        val baseCurrency = if (baseCurrencyRate != null) currencyCountBy else currencyList.baseCurrency
+        val baseCurrencyValue = currencyValue.divide(baseCurrencyRate ?: BigDecimal.ONE, 5, RoundingMode.HALF_UP)
+
+        return CurrencyList(baseCurrency = baseCurrency, rates = rates.mapValues { it.value.multiply(baseCurrencyValue) })
     }
 }

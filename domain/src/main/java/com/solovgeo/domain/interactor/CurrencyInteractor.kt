@@ -1,41 +1,43 @@
 package com.solovgeo.domain.interactor
 
-import com.solovgeo.domain.entity.CalculatedCurrencyValues
+import com.solovgeo.domain.entity.Currency
 import com.solovgeo.domain.entity.CurrencyList
 import com.solovgeo.domain.functions.CurrencyFunctions
 import com.solovgeo.domain.repository.CurrencyRepository
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
-import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
 
 
 class CurrencyInteractor constructor(private val currencyRepository: CurrencyRepository) {
 
-    private var currency: String = ""
-    private var value = BigDecimal.ZERO
 
     private val observable = Observable.interval(1L, TimeUnit.SECONDS)
-    private val publishSubject = PublishSubject.create<CurrencyList>()
+    private val currentCurrencyPublishSubject = PublishSubject.create<Currency>()
 
-    fun startSync(): Observable<CalculatedCurrencyValues> {
-        return observable.flatMapSingle {
-            currencyRepository.getCurrencyList()
-        }
-            .mergeWith(publishSubject)
-            .map {
-                CurrencyFunctions.calculateCurrencyValues(currency, value, it)
-            }
+    fun startSync(): Observable<CurrencyList> {
+        return Observable.combineLatest(
+            getCurrencyListObservable(),
+            currentCurrencyPublishSubject,
+            BiFunction { currencyList: CurrencyList, currency: Currency ->
+                CurrencyFunctions.calculateCurrencyValues(currency.name, currency.value, currencyList)
+            })
     }
 
-    fun changeCurrency(currency: String, value: BigDecimal) {
-        this.currency = currency
-        this.value = value
+    fun changeCurrency(currency: Currency) {
+        currentCurrencyPublishSubject.onNext(currency)
     }
 
     fun getCurrencyList(): Single<CurrencyList> {
         return currencyRepository.getCurrencyList()
+    }
+
+    private fun getCurrencyListObservable(): Observable<CurrencyList> {
+        return observable.flatMapSingle {
+            currencyRepository.getCurrencyList()
+        }
     }
 
 
