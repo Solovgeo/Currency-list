@@ -1,4 +1,4 @@
-package com.solovgeo.domain
+package com.solovgeo.core
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

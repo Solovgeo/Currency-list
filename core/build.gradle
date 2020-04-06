@@ -28,6 +28,16 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api project(path: ':core')
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Toothpick
+    api "com.github.stephanenicolas.toothpick:toothpick-runtime:$toothpickVersion"
+    api "com.github.stephanenicolas.toothpick:smoothie:$toothpickVersion"
+    kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpickVersion"
+
+    // Rx
+    api "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    api "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+
     testImplementation 'junit:junit:4.12'
 }
