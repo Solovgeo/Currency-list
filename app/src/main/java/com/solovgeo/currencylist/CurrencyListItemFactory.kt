@@ -2,7 +2,7 @@ package com.solovgeo.currencylist
 
 import java.math.BigDecimal
 
-class CurrencyListItemFabric {
+class CurrencyListItemFactory {
 
     private val iconDescriptionMap = hashMapOf(
         "USD" to (R.drawable.ic_us to R.string.usd_description),

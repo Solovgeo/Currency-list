@@ -12,7 +12,7 @@ class DefaultCurrencyRepository @Inject constructor(
 ) : CurrencyRepository {
 
     override fun getCurrencyList(baseCurrency: String?): Single<CurrencyList> {
-        return serviceApi.getCurrencyList(baseCurrency)
+        return serviceApi.getCurrencyList(if (baseCurrency.isNullOrBlank()) null else baseCurrency)
             .map { CurrencyList(baseCurrency = it.baseCurrency, rates = it.rates) }
             .subscribeOnIo()
     }
