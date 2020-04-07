@@ -2,4 +2,10 @@
     <string name="app_name">Currency list</string>
     <string name="item_currency_list_icon_description">Currency icon</string>
     <string name="item_currency_list_value_hint">Currency value</string>
+
+    <string name="usd_description">US Dollar</string>
+    <string name="eu_description">EURO</string>
+    <string name="sweden_description">Swedish Krona</string>
+    <string name="canada_description">Canadian Dollar</string>
+    <string name="empty" />
 </resources>

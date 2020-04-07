@@ -2,6 +2,7 @@ package com.solovgeo.currencylist
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +30,9 @@ class CurrencyListActivity : AppCompatActivity() {
     }
 
     private fun initObservers() {
-
+        viewModel.currencyListItems.observe(this, Observer {
+            currencyListAdapter.setData(it)
+        })
     }
 
     private fun createViewModel(): CurrencyListViewModel {
