@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit
 
 class CurrencyInteractor constructor(private val currencyRepository: CurrencyRepository) {
 
-
     private val observable = Observable.interval(1L, TimeUnit.SECONDS)
     private val currentCurrencyPublishSubject = PublishSubject.create<Currency>()
 

@@ -4,5 +4,5 @@ import com.solovgeo.domain.entity.CurrencyList
 import io.reactivex.Single
 
 interface CurrencyRepository {
-    fun getCurrencyList(): Single<CurrencyList>
+    fun getCurrencyList(baseValue: String?): Single<CurrencyList>
 }

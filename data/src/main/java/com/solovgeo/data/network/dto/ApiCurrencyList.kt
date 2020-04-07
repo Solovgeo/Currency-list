@@ -1,6 +1,8 @@
 package com.solovgeo.data.network.dto
 
+import java.math.BigDecimal
+
 data class ApiCurrencyList(
     val baseCurrency: String,
-    val rates: HashMap<String, Double>
+    val rates: Map<String, BigDecimal>
 )
