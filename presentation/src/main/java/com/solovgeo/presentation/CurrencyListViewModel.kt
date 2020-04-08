@@ -5,13 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import com.solovgeo.core.extentions.observeOnUi
 import com.solovgeo.domain.entity.Currency
 import com.solovgeo.domain.interactor.CurrencyInteractor
+import com.solovgeo.presentation.base.BaseViewModel
 import javax.inject.Inject
 
 class CurrencyListViewModel @Inject constructor(
     private val currencyInteractor: CurrencyInteractor,
     private val currencyListItemFactory: CurrencyListItemFactory
-) :
-    com.solovgeo.presentation.base.BaseViewModel() {
+) : BaseViewModel() {
 
     val currencyListItems = MutableLiveData<List<CurrencyListItem>>()
 

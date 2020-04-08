@@ -30,4 +30,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(path: ':core')
     testImplementation 'junit:junit:4.12'
+
+    kapt "com.github.stephanenicolas.toothpick:toothpick-compiler:$toothpickVersion"
 }

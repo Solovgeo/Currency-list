@@ -8,9 +8,10 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
-class CurrencyInteractor constructor(private val currencyRepository: CurrencyRepository) {
+class CurrencyInteractor @Inject constructor(private val currencyRepository: CurrencyRepository) {
 
     private val observable = Observable.interval(1L, TimeUnit.SECONDS)
     private val currentCurrencyPublishSubject = BehaviorSubject.createDefault(Currency("", BigDecimal.ONE))

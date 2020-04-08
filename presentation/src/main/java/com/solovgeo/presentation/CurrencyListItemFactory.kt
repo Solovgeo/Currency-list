@@ -1,8 +1,9 @@
 package com.solovgeo.presentation
 
 import java.math.BigDecimal
+import javax.inject.Inject
 
-class CurrencyListItemFactory {
+class CurrencyListItemFactory @Inject constructor() {
 
     private val iconDescriptionMap = hashMapOf(
         "USD" to (R.drawable.ic_us to R.string.usd_description),
