@@ -1,10 +1,10 @@
-package com.solovgeo.currencylist
+package com.solovgeo.presentation
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.solovgeo.currencylist.extentions.toFormattedString
+import com.solovgeo.presentation.extentions.toFormattedString
 import kotlinx.android.synthetic.main.item_currency_list.view.*
 
 class CurrencyListAdapter() : RecyclerView.Adapter<CurrencyListAdapter.MyViewHolder>() {

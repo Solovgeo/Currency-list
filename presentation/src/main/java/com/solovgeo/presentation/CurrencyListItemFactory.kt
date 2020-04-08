@@ -1,4 +1,4 @@
-package com.solovgeo.currencylist
+package com.solovgeo.presentation
 
 import java.math.BigDecimal
 

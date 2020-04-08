@@ -1,4 +1,4 @@
-package com.solovgeo.currencylist.base
+package com.solovgeo.presentation.base
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable

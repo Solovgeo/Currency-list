@@ -1,4 +1,4 @@
-package com.solovgeo.currencylist
+package com.solovgeo.presentation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
