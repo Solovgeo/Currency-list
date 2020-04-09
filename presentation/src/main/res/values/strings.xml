@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Currency list</string>
+    <string name="activity_currency_list_title_rates">Rates</string>
     <string name="item_currency_list_icon_description">Currency icon</string>
     <string name="item_currency_list_value_hint">Currency value</string>
 

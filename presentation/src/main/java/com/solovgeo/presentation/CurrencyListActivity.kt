@@ -11,7 +11,7 @@ import toothpick.Toothpick
 
 class CurrencyListActivity : AppCompatActivity() {
 
-    private val currencyListAdapter = com.solovgeo.presentation.CurrencyListAdapter()
+    private val currencyListAdapter = CurrencyListAdapter()
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) { createViewModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -36,7 +36,7 @@ class CurrencyListViewModel @Inject constructor(
                     }
                 }
             }, {
-                Log.e("CurrencyListViewModel", it.stackTrace.toString())
+                Log.e("ERROR", "CurrencyListViewModel", it)
             })
             .disposeLater()
     }

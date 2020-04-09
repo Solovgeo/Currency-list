@@ -14,7 +14,7 @@
         android:layout_marginTop="@dimen/spacing16"
         android:layout_marginBottom="@dimen/spacing16"
         android:fontFamily="sans-serif-medium"
-        android:text="Hello World!"
+        android:text="@string/activity_currency_list_title_rates"
         android:textColor="@color/black"
         android:textSize="@dimen/font20" />
 
