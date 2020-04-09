@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.solovgeo.core.extentions.observeOnUi
 import com.solovgeo.domain.entity.Currency
+import com.solovgeo.domain.entity.CurrencyListCalculated
 import com.solovgeo.domain.interactor.CurrencyInteractor
 import com.solovgeo.presentation.base.BaseViewModel
 import javax.inject.Inject
@@ -26,18 +27,23 @@ class CurrencyListViewModel @Inject constructor(
     private fun initObservers() {
         currencyInteractor.startSync()
             .observeOnUi()
-            .subscribe({ currencyList ->
-                val currentCurrencyList = currencyListItems.value
-                if (currentCurrencyList == null) {
-                    currencyListItems.value = currencyList.rates.map { currencyListItemFactory.create(it.key, it.value) }
-                } else {
-                    currencyListItems.value = currentCurrencyList.map {
-                        it.copy(currencyValue = currencyList.rates.getValue(it.currencyTitle))
-                    }
-                }
-            }, {
+            .subscribe(::processCurrencyList) {
                 Log.e("ERROR", "CurrencyListViewModel", it)
-            })
+            }
             .disposeLater()
+    }
+
+    private fun processCurrencyList(currencyList: CurrencyListCalculated) {
+        val currentCurrencyList = currencyListItems.value
+        if (currentCurrencyList == null) {
+            val newValue = mutableListOf<CurrencyListItem>()
+            newValue.add(currencyListItemFactory.create(currencyList.baseCurrency.name, currencyList.baseCurrency.value))
+            newValue.addAll(currencyList.rates.map { currencyListItemFactory.create(it.key, it.value) })
+            currencyListItems.value = newValue
+        } else {
+            currencyListItems.value = currentCurrencyList.map { currencyListItem ->
+                currencyList.rates[currencyListItem.currencyTitle]?.let { currencyListItem.copy(currencyValue = it) } ?: currencyListItem
+            }
+        }
     }
 }

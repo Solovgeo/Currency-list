@@ -1,7 +1,7 @@
 package com.solovgeo.domain.interactor
 
 import com.solovgeo.domain.entity.Currency
-import com.solovgeo.domain.entity.CurrencyList
+import com.solovgeo.domain.entity.CurrencyListCalculated
 import com.solovgeo.domain.functions.CurrencyFunctions
 import com.solovgeo.domain.repository.CurrencyRepository
 import io.reactivex.Observable
@@ -16,13 +16,13 @@ class CurrencyInteractor @Inject constructor(private val currencyRepository: Cur
     private val observable = Observable.interval(1L, TimeUnit.SECONDS)
     private val currentCurrencyPublishSubject = BehaviorSubject.createDefault(Currency("", BigDecimal.ONE))
 
-    fun startSync(): Observable<CurrencyList> {
+    fun startSync(): Observable<CurrencyListCalculated> {
         return observable.flatMap { currentCurrencyPublishSubject }
             .mergeWith(currentCurrencyPublishSubject)
             .concatMapSingle { currency ->
                 currencyRepository.getCurrencyList(currency.name).map { it to currency }
             }.map {
-                CurrencyFunctions.calculateCurrencyValues(it.second.name, it.second.value, it.first)
+                CurrencyFunctions.calculateCurrencyValues(it.second.value, it.first)
             }
     }
 

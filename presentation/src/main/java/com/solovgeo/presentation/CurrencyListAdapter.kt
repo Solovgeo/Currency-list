@@ -3,6 +3,8 @@ package com.solovgeo.presentation
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DiffUtil.DiffResult
 import androidx.recyclerview.widget.RecyclerView
 import com.solovgeo.presentation.extentions.toFormattedString
 import kotlinx.android.synthetic.main.item_currency_list.view.*
@@ -27,9 +29,34 @@ class CurrencyListAdapter() : RecyclerView.Adapter<CurrencyListAdapter.MyViewHol
 
     override fun getItemCount() = currencies.size
 
-    fun setData(currencies: List<CurrencyListItem>) {
+    fun setData(newItems: List<CurrencyListItem>) {
+        val diffResult = calculateDiff(this.currencies, newItems)
         this.currencies.clear()
-        this.currencies.addAll(currencies)
-        notifyDataSetChanged()
+        this.currencies.addAll(newItems)
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    private fun calculateDiff(oldItems: List<CurrencyListItem>, newItems: List<CurrencyListItem>): DiffResult {
+        return DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int {
+                return oldItems.size
+            }
+
+            override fun getNewListSize(): Int {
+                return newItems.size
+            }
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                val oldItem = oldItems[oldItemPosition]
+                val newItem = newItems[newItemPosition]
+                return oldItem.currencyTitle == newItem.currencyTitle
+            }
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                val oldItem = oldItems[oldItemPosition]
+                val newItem = newItems[newItemPosition]
+                return oldItem == newItem
+            }
+        })
     }
 }
