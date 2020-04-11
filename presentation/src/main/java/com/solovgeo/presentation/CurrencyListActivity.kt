@@ -6,13 +6,23 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.solovgeo.domain.entity.Currency
 import kotlinx.android.synthetic.main.activity_currency_list.*
 import toothpick.Toothpick
 
 class CurrencyListActivity : AppCompatActivity() {
 
-    private val currencyListAdapter = CurrencyListAdapter()
     private val viewModel by lazy(LazyThreadSafetyMode.NONE) { createViewModel() }
+    private val currencyListAdapter = CurrencyListAdapter(object : CurrencyListAdapter.ItemEventHandler {
+        override fun onItemClick(clickedCurrency: Currency) {
+            viewModel.selectNewMainCurrency(clickedCurrency)
+        }
+
+        override fun onValueChange(newCurrency: Currency) {
+            viewModel.onValueChange(newCurrency)
+        }
+
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +42,11 @@ class CurrencyListActivity : AppCompatActivity() {
     private fun initObservers() {
         viewModel.currencyListItems.observe(this, Observer {
             currencyListAdapter.setData(it)
+        })
+        viewModel.scrollToTop.observe(this, Observer {
+            if (it) {
+                rv_activity_main_currency_list.scrollToPosition(0)
+            }
         })
     }
 

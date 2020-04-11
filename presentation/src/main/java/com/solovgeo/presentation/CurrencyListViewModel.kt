@@ -7,6 +7,7 @@ import com.solovgeo.domain.entity.Currency
 import com.solovgeo.domain.entity.CurrencyListCalculated
 import com.solovgeo.domain.interactor.CurrencyInteractor
 import com.solovgeo.presentation.base.BaseViewModel
+import com.solovgeo.presentation.base.SingleLiveEvent
 import javax.inject.Inject
 
 class CurrencyListViewModel @Inject constructor(
@@ -15,13 +16,10 @@ class CurrencyListViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val currencyListItems = MutableLiveData<List<CurrencyListItem>>()
+    val scrollToTop = SingleLiveEvent<Boolean>()
 
     init {
         initObservers()
-    }
-
-    fun changeCurrency(currency: Currency) {
-        currencyInteractor.changeCurrency(currency)
     }
 
     private fun initObservers() {
@@ -45,5 +43,20 @@ class CurrencyListViewModel @Inject constructor(
                 currencyList.rates[currencyListItem.currencyTitle]?.let { currencyListItem.copy(currencyValue = it) } ?: currencyListItem
             }
         }
+    }
+
+    fun onValueChange(newCurrency: Currency) {
+        currencyInteractor.changeCurrency(newCurrency)
+    }
+
+    fun selectNewMainCurrency(clickedCurrency: Currency) {
+        val currentCurrencyList = currencyListItems.value
+        currencyListItems.value = currentCurrencyList?.toMutableList()?.apply {
+            val item = find { it.currencyTitle == clickedCurrency.name }
+            remove(item)
+            item?.let { add(0, it) }
+        }
+        scrollToTop.value = true
+        currencyInteractor.changeCurrency(clickedCurrency)
     }
 }
