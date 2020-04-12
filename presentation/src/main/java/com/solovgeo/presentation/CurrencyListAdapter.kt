@@ -50,9 +50,11 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
         holder.view.setOnClickListener(onClickListener)
         if (position == 0) {
             holder.view.et_item_currency_list_value.addTextChangedListener(baseCurrencyListener)
+            holder.view.et_item_currency_list_value.isEnabled = true
             holder.view.et_item_currency_list_value.requestFocus()
         } else {
             holder.view.et_item_currency_list_value.removeTextChangedListener(baseCurrencyListener)
+            holder.view.et_item_currency_list_value.isEnabled = false
         }
     }
 
