@@ -62,7 +62,7 @@
 
     <EditText
         android:id="@+id/et_item_currency_list_value"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/spacing16"
         android:fontFamily="sans-serif-medium"
@@ -76,7 +76,7 @@
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toEndOf="@+id/gl_item_currency_list_value"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_default="wrap"
+        app:layout_constrainedWidth="true"
         tools:text="1321.10" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
