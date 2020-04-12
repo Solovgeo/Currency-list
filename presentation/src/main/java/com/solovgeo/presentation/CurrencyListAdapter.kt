@@ -43,16 +43,19 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
         if (position == 0) {
             holder.editTextValue.addTextChangedListener(baseCurrencyListener)
-            holder.editTextValue.isEnabled = true
+            holder.editTextValue.setText(currencies[position].currencyValue.toFormattedString())
+            holder.editTextValue.visibility = View.VISIBLE
+            holder.textViewValue.visibility = View.GONE
             holder.editTextValue.requestFocus()
         } else {
             holder.editTextValue.removeTextChangedListener(baseCurrencyListener)
-            holder.editTextValue.isEnabled = false
+            holder.textViewValue.text = currencies[position].currencyValue.toFormattedString()
+            holder.editTextValue.visibility = View.GONE
+            holder.textViewValue.visibility = View.VISIBLE
         }
         holder.name.text = currencies[position].currencyTitle
         holder.description.setText(currencies[position].currencyDescriptionRes)
         holder.icon.setImageResource(currencies[position].currencyIconRes)
-        holder.editTextValue.setText(currencies[position].currencyValue.toFormattedString())
         holder.view.setOnClickListener {
             itemEventHandler.onItemClick(Currency(currencies[position].currencyTitle, currencies[position].currencyValue))
         }
@@ -97,6 +100,7 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
         val description: TextView = view.tv_item_currency_list_description
         val icon: ImageView = view.iv_item_currency_list_icon
         val editTextValue: EditText = view.et_item_currency_list_value
+        val textViewValue: TextView = view.tv_item_currency_list_value
     }
 
     interface ItemEventHandler {
