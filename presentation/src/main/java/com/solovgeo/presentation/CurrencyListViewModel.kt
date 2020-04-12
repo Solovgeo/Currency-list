@@ -17,6 +17,7 @@ class CurrencyListViewModel @Inject constructor(
 
     val currencyListItems = MutableLiveData<List<CurrencyListItem>>()
     val scrollToTop = SingleLiveEvent<Boolean>()
+    val isLoading = MutableLiveData<Boolean>().apply { value = true }
 
     init {
         initObservers()
@@ -34,6 +35,7 @@ class CurrencyListViewModel @Inject constructor(
     private fun processCurrencyList(currencyList: CurrencyListCalculated) {
         val currentCurrencyList = currencyListItems.value
         if (currentCurrencyList == null) {
+            isLoading.value = false
             val newValue = mutableListOf<CurrencyListItem>()
             newValue.add(currencyListItemFactory.create(currencyList.baseCurrency.name, currencyList.baseCurrency.value))
             newValue.addAll(currencyList.rates.map { currencyListItemFactory.create(it.key, it.value) })
