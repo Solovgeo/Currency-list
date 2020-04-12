@@ -5,6 +5,9 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DiffUtil.DiffResult
 import androidx.recyclerview.widget.RecyclerView
@@ -34,27 +37,26 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
-        val textView = LayoutInflater.from(parent.context).inflate(R.layout.item_currency_list, parent, false)
-        return CurrencyViewHolder(textView)
+        return CurrencyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_currency_list, parent, false))
     }
 
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
         if (position == 0) {
-            holder.view.et_item_currency_list_value.addTextChangedListener(baseCurrencyListener)
-            holder.view.et_item_currency_list_value.onFocusChangeListener = null
-            holder.view.et_item_currency_list_value.requestFocus()
+            holder.editTextValue.addTextChangedListener(baseCurrencyListener)
+            holder.editTextValue.onFocusChangeListener = null
+            holder.editTextValue.requestFocus()
         } else {
-            holder.view.et_item_currency_list_value.removeTextChangedListener(baseCurrencyListener)
-            holder.view.et_item_currency_list_value.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            holder.editTextValue.removeTextChangedListener(baseCurrencyListener)
+            holder.editTextValue.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
                     itemEventHandler.onItemClick(Currency(currencies[position].currencyTitle, currencies[position].currencyValue))
                 }
             }
         }
-        holder.view.tv_item_currency_list_name.text = currencies[position].currencyTitle
-        holder.view.tv_item_currency_list_description.setText(currencies[position].currencyDescriptionRes)
-        holder.view.iv_item_currency_list_icon.setImageResource(currencies[position].currencyIconRes)
-        holder.view.et_item_currency_list_value.setText(currencies[position].currencyValue.toFormattedString())
+        holder.name.text = currencies[position].currencyTitle
+        holder.description.setText(currencies[position].currencyDescriptionRes)
+        holder.icon.setImageResource(currencies[position].currencyIconRes)
+        holder.editTextValue.setText(currencies[position].currencyValue.toFormattedString())
         holder.view.setOnClickListener {
             itemEventHandler.onItemClick(Currency(currencies[position].currencyTitle, currencies[position].currencyValue))
         }
@@ -94,7 +96,12 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
         })
     }
 
-    class CurrencyViewHolder(val view: View) : RecyclerView.ViewHolder(view)
+    class CurrencyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        val name: TextView = view.tv_item_currency_list_name
+        val description: TextView = view.tv_item_currency_list_description
+        val icon: ImageView = view.iv_item_currency_list_icon
+        val editTextValue: EditText = view.et_item_currency_list_value
+    }
 
     interface ItemEventHandler {
         fun onItemClick(clickedCurrency: Currency)

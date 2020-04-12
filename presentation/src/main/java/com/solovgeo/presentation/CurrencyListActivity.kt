@@ -25,7 +25,6 @@ class CurrencyListActivity : AppCompatActivity() {
             Log.d("ActivityLOG onValueChan", newCurrency.toString())
             viewModel.onValueChange(newCurrency)
         }
-
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +32,16 @@ class CurrencyListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_currency_list)
         initRecyclerView()
         initObservers()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.startSync()
+    }
+
+    override fun onStop() {
+        viewModel.stopSync()
+        super.onStop()
     }
 
     private fun initRecyclerView() {

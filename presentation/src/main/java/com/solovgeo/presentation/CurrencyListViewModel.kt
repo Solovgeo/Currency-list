@@ -2,49 +2,42 @@ package com.solovgeo.presentation
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.solovgeo.core.extentions.observeOnUi
 import com.solovgeo.domain.entity.Currency
 import com.solovgeo.domain.entity.CurrencyListCalculated
 import com.solovgeo.domain.interactor.CurrencyInteractor
-import com.solovgeo.presentation.base.BaseViewModel
 import com.solovgeo.presentation.base.SingleLiveEvent
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 class CurrencyListViewModel @Inject constructor(
     private val currencyInteractor: CurrencyInteractor,
     private val currencyListItemFactory: CurrencyListItemFactory
-) : BaseViewModel() {
+) : ViewModel() {
 
     val currencyListItems = MutableLiveData<List<CurrencyListItem>>()
     val scrollToTop = SingleLiveEvent<Boolean>()
     val isLoading = MutableLiveData<Boolean>().apply { value = true }
+    private var syncDisposable: Disposable? = null
 
-    init {
-        initObservers()
-    }
-
-    private fun initObservers() {
-        currencyInteractor.startSync()
+    fun startSync() {
+        syncDisposable?.dispose()
+        syncDisposable = currencyInteractor.startSync()
+            .map(::processCurrencyList)
             .observeOnUi()
-            .subscribe(::processCurrencyList) {
+            .subscribe({
+                if (isLoading.value != false) {
+                    isLoading.value = false
+                }
+                currencyListItems.value = it
+            }) {
                 Log.e("ERROR", "CurrencyListViewModel", it)
             }
-            .disposeLater()
     }
 
-    private fun processCurrencyList(currencyList: CurrencyListCalculated) {
-        val currentCurrencyList = currencyListItems.value
-        if (currentCurrencyList == null) {
-            isLoading.value = false
-            val newValue = mutableListOf<CurrencyListItem>()
-            newValue.add(currencyListItemFactory.create(currencyList.baseCurrency.name, currencyList.baseCurrency.value))
-            newValue.addAll(currencyList.rates.map { currencyListItemFactory.create(it.key, it.value) })
-            currencyListItems.value = newValue
-        } else {
-            currencyListItems.value = currentCurrencyList.map { currencyListItem ->
-                currencyList.rates[currencyListItem.currencyTitle]?.let { currencyListItem.copy(currencyValue = it) } ?: currencyListItem
-            }
-        }
+    fun stopSync() {
+        syncDisposable?.dispose()
     }
 
     fun onValueChange(newCurrency: Currency) {
@@ -61,4 +54,32 @@ class CurrencyListViewModel @Inject constructor(
         scrollToTop.value = true
         currencyInteractor.changeCurrency(clickedCurrency)
     }
+
+    override fun onCleared() {
+        syncDisposable?.dispose()
+        super.onCleared()
+    }
+
+    private fun processCurrencyList(currencyList: CurrencyListCalculated): List<CurrencyListItem> {
+        val currentCurrencyList = currencyListItems.value
+        return if (currentCurrencyList == null) {
+            createNewList(currencyList)
+        } else {
+            updateCurrentList(currentCurrencyList, currencyList)
+        }
+    }
+
+    private fun createNewList(currencyList: CurrencyListCalculated): List<CurrencyListItem> {
+        val newValue = mutableListOf<CurrencyListItem>()
+        newValue.add(currencyListItemFactory.create(currencyList.baseCurrency.name, currencyList.baseCurrency.value))
+        newValue.addAll(currencyList.rates.map { currencyListItemFactory.create(it.key, it.value) })
+        return newValue
+    }
+
+    private fun updateCurrentList(currentCurrencyList: List<CurrencyListItem>, currencyList: CurrencyListCalculated): List<CurrencyListItem> {
+        return currentCurrencyList.map { currencyListItem ->
+            currencyList.rates[currencyListItem.currencyTitle]?.let { currencyListItem.copy(currencyValue = it) } ?: currencyListItem
+        }
+    }
+
 }
