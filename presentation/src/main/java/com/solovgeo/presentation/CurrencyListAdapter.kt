@@ -43,15 +43,11 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
         if (position == 0) {
             holder.editTextValue.addTextChangedListener(baseCurrencyListener)
-            holder.editTextValue.onFocusChangeListener = null
+            holder.editTextValue.isEnabled = true
             holder.editTextValue.requestFocus()
         } else {
             holder.editTextValue.removeTextChangedListener(baseCurrencyListener)
-            holder.editTextValue.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    itemEventHandler.onItemClick(Currency(currencies[position].currencyTitle, currencies[position].currencyValue))
-                }
-            }
+            holder.editTextValue.isEnabled = false
         }
         holder.name.text = currencies[position].currencyTitle
         holder.description.setText(currencies[position].currencyDescriptionRes)
