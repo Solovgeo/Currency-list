@@ -2,6 +2,7 @@ package com.solovgeo.currencylist
 
 import android.app.Application
 import com.solovgeo.currencylist.di.module.AppModule
+import toothpick.Scope
 import toothpick.Toothpick
 
 class App : Application() {
@@ -19,6 +20,10 @@ class App : Application() {
         }
 
         val appScope = Toothpick.openScope(this)
-        appScope.installModules(AppModule())
+        installToothpickModules(appScope)
+    }
+
+    fun installToothpickModules(scope: Scope) {
+        scope.installModules(AppModule())
     }
 }

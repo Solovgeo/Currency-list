@@ -4,9 +4,9 @@ import java.math.BigDecimal
 import java.text.DecimalFormat
 
 object Formatters {
-    val scaleTwoFormat = DecimalFormat("#0.00######")
+    val decimalFormat = DecimalFormat("#0.######")
 }
 
 fun BigDecimal.toFormattedString(): String {
-    return Formatters.scaleTwoFormat.format(this)
+    return Formatters.decimalFormat.format(this)
 }

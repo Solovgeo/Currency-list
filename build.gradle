@@ -40,6 +40,8 @@ allprojects {
         junit4Version = "4.12"
         mockitoVersion = "3.0.0"
         mockitoKotlinVersion = "2.1.0"
+        esspressoVersion = "3.2.0"
+        kaspressoVersion = "1.1.0"
     }
 }
 
