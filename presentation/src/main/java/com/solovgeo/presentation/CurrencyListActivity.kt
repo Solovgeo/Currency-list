@@ -24,7 +24,7 @@ class CurrencyListActivity : AppCompatActivity() {
 
         override fun onValueChange(newCurrency: Currency) {
             Log.d("ActivityLOG onValueChan", newCurrency.toString())
-            viewModel.onValueChange(newCurrency)
+            viewModel.onMainCurrencyChange(newCurrency)
         }
     })
 

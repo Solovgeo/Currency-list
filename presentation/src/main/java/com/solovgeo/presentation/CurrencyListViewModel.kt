@@ -40,7 +40,7 @@ class CurrencyListViewModel @Inject constructor(
         syncDisposable?.dispose()
     }
 
-    fun onValueChange(newCurrency: Currency) {
+    fun onMainCurrencyChange(newCurrency: Currency) {
         currencyInteractor.changeCurrency(newCurrency)
     }
 
