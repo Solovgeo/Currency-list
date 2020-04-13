@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.solovgeo.domain.entity.Currency
 import kotlinx.android.synthetic.main.activity_currency_list.*
 import toothpick.Toothpick
@@ -49,6 +50,7 @@ class CurrencyListActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@CurrencyListActivity)
             adapter = currencyListAdapter
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         }
     }
 

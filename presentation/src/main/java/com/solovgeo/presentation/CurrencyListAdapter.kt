@@ -52,13 +52,16 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
             holder.textViewValue.text = currencies[position].currencyValue.toFormattedString()
             holder.editTextValue.visibility = View.GONE
             holder.textViewValue.visibility = View.VISIBLE
+            holder.view.setOnClickListener {
+                itemEventHandler.onItemClick(Currency(currencies[position].currencyTitle, currencies[position].currencyValue))
+            }
         }
-        holder.name.text = currencies[position].currencyTitle
-        holder.description.setText(currencies[position].currencyDescriptionRes)
-        holder.icon.setImageResource(currencies[position].currencyIconRes)
-        holder.view.setOnClickListener {
-            itemEventHandler.onItemClick(Currency(currencies[position].currencyTitle, currencies[position].currencyValue))
+        if (holder.name.text != currencies[position].currencyTitle) {
+            holder.name.text = currencies[position].currencyTitle
+            holder.description.setText(currencies[position].currencyDescriptionRes)
+            holder.icon.setImageResource(currencies[position].currencyIconRes)
         }
+
 
     }
 
