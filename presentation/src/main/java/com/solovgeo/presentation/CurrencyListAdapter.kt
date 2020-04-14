@@ -61,8 +61,6 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
             holder.description.setText(currencies[position].currencyDescriptionRes)
             holder.icon.setImageResource(currencies[position].currencyIconRes)
         }
-
-
     }
 
     override fun getItemCount() = currencies.size

@@ -29,12 +29,9 @@ public final class NotifyFirstItemChangeAdapterListUpdateCallback implements Lis
 
     @Override
     public void onMoved(int fromPosition, int toPosition) {
-        if (fromPosition == 0 || toPosition == 0) {
-            mAdapter.notifyItemChanged(fromPosition);
-            mAdapter.notifyItemChanged(toPosition);
-        } else {
-            mAdapter.notifyItemMoved(fromPosition, toPosition);
-        }
+        mAdapter.notifyItemMoved(fromPosition, toPosition);
+        mAdapter.notifyItemChanged(fromPosition);
+        mAdapter.notifyItemChanged(toPosition);
     }
 
     @Override
