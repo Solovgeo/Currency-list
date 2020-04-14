@@ -1,8 +1,10 @@
 package com.solovgeo.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -25,6 +27,11 @@ class CurrencyListActivity : AppCompatActivity() {
         override fun onValueChange(newCurrency: Currency) {
             Log.d("ActivityLOG onValueChan", newCurrency.toString())
             viewModel.onMainCurrencyChange(newCurrency)
+        }
+
+        override fun showKeyboard(view: View) {
+            val imm = this@CurrencyListActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
     })
 

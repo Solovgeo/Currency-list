@@ -42,19 +42,9 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
 
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
         if (position == 0) {
-            holder.editTextValue.addTextChangedListener(baseCurrencyListener)
-            holder.editTextValue.setText(currencies[position].currencyValue.toFormattedString())
-            holder.editTextValue.visibility = View.VISIBLE
-            holder.textViewValue.visibility = View.GONE
-            holder.editTextValue.requestFocus()
+            configureFirstItemValue(holder, position)
         } else {
-            holder.editTextValue.removeTextChangedListener(baseCurrencyListener)
-            holder.textViewValue.text = currencies[position].currencyValue.toFormattedString()
-            holder.editTextValue.visibility = View.GONE
-            holder.textViewValue.visibility = View.VISIBLE
-            holder.view.setOnClickListener {
-                itemEventHandler.onItemClick(Currency(currencies[position].currencyTitle, currencies[position].currencyValue))
-            }
+            configureOtherItemValue(holder, position)
         }
         if (holder.name.text != currencies[position].currencyTitle) {
             holder.name.text = currencies[position].currencyTitle
@@ -70,6 +60,25 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
         this.currencies.clear()
         this.currencies.addAll(newItems)
         diffResult.dispatchUpdatesTo(listUpdateCallback)
+    }
+
+    private fun configureFirstItemValue(holder: CurrencyViewHolder, position: Int) {
+        holder.editTextValue.addTextChangedListener(baseCurrencyListener)
+        holder.editTextValue.setText(currencies[position].currencyValue.toFormattedString())
+        holder.editTextValue.visibility = View.VISIBLE
+        holder.textViewValue.visibility = View.GONE
+        holder.editTextValue.requestFocus()
+        itemEventHandler.showKeyboard(holder.editTextValue)
+    }
+
+    private fun configureOtherItemValue(holder: CurrencyViewHolder, position: Int) {
+        holder.editTextValue.removeTextChangedListener(baseCurrencyListener)
+        holder.textViewValue.text = currencies[position].currencyValue.toFormattedString()
+        holder.editTextValue.visibility = View.GONE
+        holder.textViewValue.visibility = View.VISIBLE
+        holder.view.setOnClickListener {
+            itemEventHandler.onItemClick(Currency(currencies[position].currencyTitle, currencies[position].currencyValue))
+        }
     }
 
     private fun calculateDiff(oldItems: List<CurrencyListItem>, newItems: List<CurrencyListItem>): DiffResult {
@@ -107,5 +116,6 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
     interface ItemEventHandler {
         fun onItemClick(clickedCurrency: Currency)
         fun onValueChange(newCurrency: Currency)
+        fun showKeyboard(view: View)
     }
 }
