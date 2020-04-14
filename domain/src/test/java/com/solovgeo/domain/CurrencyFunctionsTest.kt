@@ -35,7 +35,7 @@ class CurrencyFunctionsTest {
         val result = CurrencyFunctions.calculateCurrencyValues(currencyValue, currencyList)
 
         assertEquals(2, result.rates.size)
-        assertEquals(Currency("EUR", BigDecimal.ONE), result.baseCurrency)
+        assertEquals(Currency("EUR", BigDecimal("1.6")), result.baseCurrency)
         assertTrue((result.rates["USD"] ?: error("")).compareTo(BigDecimal("1.76")) == 0)
         assertTrue((result.rates["RUB"] ?: error("")).compareTo(BigDecimal("123.04")) == 0)
         assertEquals(null, result.rates["EUR"])
