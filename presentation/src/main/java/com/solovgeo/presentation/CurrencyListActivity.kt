@@ -43,16 +43,6 @@ class CurrencyListActivity : AppCompatActivity() {
         initObservers()
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.startSync()
-    }
-
-    override fun onStop() {
-        viewModel.stopSync()
-        super.onStop()
-    }
-
     private fun initRecyclerView() {
         rv_activity_main_currency_list.apply {
             setHasFixedSize(true)

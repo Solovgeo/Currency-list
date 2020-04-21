@@ -9,14 +9,12 @@ import com.solovgeo.data.network.ServiceApi
 import com.solovgeo.data.repository.DefaultCurrencyRepository
 import com.solovgeo.domain.interactor.CurrencyInteractor
 import com.solovgeo.domain.repository.CurrencyRepository
-import com.solovgeo.presentation.CurrencyListViewModel
 import okhttp3.OkHttpClient
 import toothpick.config.Module
 
 class AppModule : Module() {
     init {
 
-        bind(CurrencyListViewModel::class.java).singleton()
         // Gson
         bind(Gson::class.java).toProvider(GsonProvider::class.java).providesSingleton()
 

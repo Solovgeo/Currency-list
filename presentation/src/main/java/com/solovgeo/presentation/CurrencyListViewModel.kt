@@ -21,8 +21,7 @@ class CurrencyListViewModel @Inject constructor(
     val isLoading = MutableLiveData<Boolean>().apply { value = true }
     private var syncDisposable: Disposable? = null
 
-    fun startSync() {
-        syncDisposable?.dispose()
+    init {
         syncDisposable = currencyInteractor.startSync()
             .map(::processCurrencyList)
             .observeOnUi()
@@ -34,10 +33,6 @@ class CurrencyListViewModel @Inject constructor(
             }) {
                 Log.e("ERROR", "CurrencyListViewModel", it)
             }
-    }
-
-    fun stopSync() {
-        syncDisposable?.dispose()
     }
 
     fun onMainCurrencyChange(newCurrency: Currency) {
