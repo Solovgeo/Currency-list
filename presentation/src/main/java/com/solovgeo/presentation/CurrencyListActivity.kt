@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.solovgeo.domain.entity.Currency
 import kotlinx.android.synthetic.main.activity_currency_list.*
@@ -58,6 +59,22 @@ class CurrencyListActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@CurrencyListActivity)
             adapter = currencyListAdapter
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                        hideKeyboard()
+                    }
+                }
+            })
+        }
+    }
+
+    private fun hideKeyboard() {
+        this.currentFocus?.let {
+            val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
 
