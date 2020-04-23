@@ -23,6 +23,7 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
     private val currencies = mutableListOf<CurrencyListItem>()
     private val listUpdateCallback = NotifyFirstItemChangeAdapterListUpdateCallback(this)
     private val baseCurrencyListener = object : TextWatcher {
+
         override fun afterTextChanged(s: Editable) {
             val string = s.toString()
             val value = if (string.isEmpty()) {
@@ -66,11 +67,12 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
     private fun configureFirstItemValue(holder: CurrencyViewHolder, position: Int) {
         holder.editTextValue.apply {
             removeTextChangedListener(baseCurrencyListener)
-            addTextChangedListener(baseCurrencyListener)
             val newText = currencies[position].currencyValue.toFormattedString()
-            if (newText != text.toString()) {
-                setText(currencies[position].currencyValue.toFormattedString())
+            val oldText = text.toString()
+            if (newText != oldText && "$newText." != oldText) {
+                setText(newText)
             }
+            addTextChangedListener(baseCurrencyListener)
             visibility = View.VISIBLE
             imeOptions = EditorInfo.IME_ACTION_DONE
             requestFocus()
