@@ -5,6 +5,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -66,6 +67,7 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
         holder.editTextValue.addTextChangedListener(baseCurrencyListener)
         holder.editTextValue.setText(currencies[position].currencyValue.toFormattedString())
         holder.editTextValue.visibility = View.VISIBLE
+        holder.editTextValue.imeOptions = EditorInfo.IME_ACTION_DONE
         holder.textViewValue.visibility = View.GONE
         holder.editTextValue.requestFocus()
         itemEventHandler.showKeyboard(holder.editTextValue)
