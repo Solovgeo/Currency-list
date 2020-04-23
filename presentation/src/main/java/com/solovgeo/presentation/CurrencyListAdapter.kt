@@ -42,15 +42,16 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
     }
 
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
-        if (position == 0) {
-            configureFirstItemValue(holder, position)
-        } else {
-            configureOtherItemValue(holder, position)
-        }
         if (holder.name.text != currencies[position].currencyTitle) {
             holder.name.text = currencies[position].currencyTitle
             holder.description.setText(currencies[position].currencyDescriptionRes)
             holder.icon.setImageResource(currencies[position].currencyIconRes)
+            if (position == 0) {
+                configureFirstItemValue(holder, position)
+            }
+        }
+        if (position != 0) {
+            configureOtherItemValue(holder, position)
         }
     }
 
@@ -64,12 +65,14 @@ class CurrencyListAdapter(private val itemEventHandler: ItemEventHandler) : Recy
     }
 
     private fun configureFirstItemValue(holder: CurrencyViewHolder, position: Int) {
-        holder.editTextValue.addTextChangedListener(baseCurrencyListener)
-        holder.editTextValue.setText(currencies[position].currencyValue.toFormattedString())
-        holder.editTextValue.visibility = View.VISIBLE
-        holder.editTextValue.imeOptions = EditorInfo.IME_ACTION_DONE
+        holder.editTextValue.apply {
+            addTextChangedListener(baseCurrencyListener)
+            setText(currencies[position].currencyValue.toFormattedString())
+            visibility = View.VISIBLE
+            imeOptions = EditorInfo.IME_ACTION_DONE
+            requestFocus()
+        }
         holder.textViewValue.visibility = View.GONE
-        holder.editTextValue.requestFocus()
         itemEventHandler.showKeyboard(holder.editTextValue)
     }
 

@@ -73,7 +73,13 @@ class CurrencyListViewModel @Inject constructor(
 
     private fun updateCurrentList(currentCurrencyList: List<CurrencyListItem>, currencyList: CurrencyListCalculated): List<CurrencyListItem> {
         return currentCurrencyList.map { currencyListItem ->
-            currencyList.rates[currencyListItem.currencyTitle]?.let { currencyListItem.copy(currencyValue = it) } ?: currencyListItem
+            val newRate = currencyList.rates[currencyListItem.currencyTitle]
+                ?: if (currencyList.baseCurrency.name == currencyListItem.currencyTitle) {
+                    currencyList.baseCurrency.value
+                } else {
+                    null
+                }
+            newRate?.let { currencyListItem.copy(currencyValue = it) } ?: currencyListItem
         }
     }
 
